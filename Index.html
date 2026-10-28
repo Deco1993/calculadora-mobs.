@@ -1,0 +1,55 @@
+
+<!doctype html>
+<html lang="pt-BR">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Calculadora de Mobs</title>
+<style>
+body{font-family:Arial,sans-serif;background:#101522;color:#fff;margin:0;padding:20px}
+main{max-width:460px;margin:auto;background:#1b2537;padding:22px;border-radius:18px}
+h1{color:#75e0b2}label{display:block;margin-top:18px}
+input,button{box-sizing:border-box;width:100%;padding:14px;margin-top:8px;border-radius:9px;font-size:17px}
+input{background:#101522;color:white;border:1px solid #526078}
+button{background:#75e0b2;color:#102019;border:0;font-weight:bold;margin-top:22px}
+#resultado{margin-top:22px;line-height:1.8;overflow-wrap:anywhere}
+.numero{font-size:36px;font-weight:bold;color:#75e0b2}
+</style>
+<main>
+<h1>⚔️ Calculadora de Mobs</h1>
+<p>Descubra quantos mobs precisa derrotar para subir de nível.</p>
+<label>Seu XP atual</label>
+<input id="atual" type="number" min="0" placeholder="Ex.: 125000">
+<label>XP necessário para o próximo nível</label>
+<input id="meta" type="number" min="1" placeholder="Ex.: 150000">
+<label>XP recebido por mob</label>
+<input id="mob" type="number" min="1" placeholder="Ex.: 3800">
+<button onclick="calcular()">Calcular mobs necessários</button>
+<div id="resultado" aria-live="polite"></div>
+</main>
+<script>
+function calcular(){
+ const a=document.getElementById('atual').value;
+ const m=document.getElementById('meta').value;
+ const x=document.getElementById('mob').value;
+ const r=document.getElementById('resultado');
+ if(a===''||m===''||x===''||!Number.isFinite(+a)||!Number.isFinite(+m)||!Number.isFinite(+x)||+a<0||+m<=0||+x<=0){
+  r.textContent='Preencha os três campos com valores válidos.';
+  return;
+ }
+ const atual=+a,meta=+m,xpMob=+x;
+ if(atual>=meta){
+  r.innerHTML='<p>Você já atingiu o XP necessário para o próximo nível!</p><p>XP acima da meta: '+(atual-meta).toLocaleString('pt-BR')+'</p>';
+  return;
+ }
+ const falta=meta-atual;
+ const mobs=Math.ceil(falta/xpMob);
+ const ganho=mobs*xpMob;
+ const final=atual+ganho;
+ r.innerHTML='<p>Você precisa derrotar:</p><div class="numero">'+mobs.toLocaleString('pt-BR')+' '+(mobs===1?'mob':'mobs')+'</div>'+
+ '<p>XP que falta: <b>'+falta.toLocaleString('pt-BR')+'</b></p>'+
+ '<p>XP ganho com os mobs: <b>'+ganho.toLocaleString('pt-BR')+'</b></p>'+
+ '<p>XP final estimado: <b>'+final.toLocaleString('pt-BR')+'</b></p>'+
+ '<p>XP excedente: <b>'+(final-meta).toLocaleString('pt-BR')+'</b></p>';
+}
+</script>
+</html>
